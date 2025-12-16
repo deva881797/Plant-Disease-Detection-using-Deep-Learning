@@ -53,20 +53,6 @@ DenseNet121 (ImageNet pretrained, include_top=False, pooling='max')
 - No augmentation
 - Test Shuffle: Disabled
 
-### Library Versions (from `version.txt`)
-
-| Library | Version |
-|---------|---------|
-| Python | 3.7.12 |
-| NumPy | 1.21.6 |
-| Pandas | 1.3.5 |
-| Matplotlib | 3.5.3 |
-| Scikit-learn | 1.0.2 |
-| Seaborn | 0.12.2 |
-| OpenCV | 4.5.4 |
-| Pillow | 9.3.0 |
-| TensorFlow | 2.11.0 |
-| Keras | 2.11.0 |
 
 ## 🚀 Quick Start
 
@@ -117,7 +103,6 @@ Plant Village/
 │   └── config.toml                     # Streamlit configuration
 ├── densenet121-Plant Village Disease-98.55.h5  # Trained model
 ├── Plant Village Disease-class_dict.csv          # Class labels
-├── version.txt                         # Training environment versions
 └── README.md                           # This file
 ```
 

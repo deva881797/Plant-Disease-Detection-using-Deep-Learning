@@ -18,7 +18,6 @@ services:
       # Mount model and class dict (read-only)
       - "./densenet121-Plant Village Disease-98.55.h5:/app/densenet121-Plant Village Disease-98.55.h5:ro"
       - "./Plant Village Disease-class_dict.csv:/app/Plant Village Disease-class_dict.csv:ro"
-      - ./version.txt:/app/version.txt:ro
     environment:
       - STREAMLIT_SERVER_PORT=8501
       - STREAMLIT_SERVER_ADDRESS=0.0.0.0

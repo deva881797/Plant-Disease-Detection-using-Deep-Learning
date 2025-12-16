@@ -2,6 +2,9 @@
 densenet121-Plant Village Disease-98.55.h5
 efficientnetb3-Plant Village Disease-*.h5
 
+# Training notebook (large file - add separately if needed)
+Train and Validate.ipynb
+
 # Python
 __pycache__/
 *.py[cod]

@@ -854,11 +854,11 @@ class PlantDiseaseUI:
             
             with st.expander("📊 Model Architecture", expanded=True):
                 st.markdown(f"""
-                **Base Model:** {training_info.get('architecture', 'EfficientNetB3')} ({training_info.get('pretrained_weights', 'ImageNet')} pretrained)
+                **Base Model:** {training_info.get('architecture', 'DenseNet121')} ({training_info.get('pretrained_weights', 'ImageNet')} pretrained)
                 
                 **Custom Layers:**
                 ```
-                EfficientNetB3 (frozen weights)
+                DenseNet121 (frozen weights)
                 └── BatchNormalization (axis=-1, momentum=0.99)
                     └── Dense(256, activation='relu')
                         ├── L2 regularization: 0.016
@@ -1271,7 +1271,7 @@ class PlantDiseaseUI:
                 🌿 <span style="background: linear-gradient(135deg, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Plant Disease Classifier</span>
             </p>
             <p style="font-size: 0.9rem; opacity: 0.8;">
-                Powered by <strong>EfficientNetB3</strong> Deep Learning • 98.55% Accuracy • 38 Disease Classes
+                Powered by <strong>DenseNet121</strong> Deep Learning • 98.55% Accuracy • 38 Disease Classes
             </p>
             <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 1rem;">
                 🔬 TensorFlow • 🐍 Python • 🎨 Streamlit • 🐳 Docker

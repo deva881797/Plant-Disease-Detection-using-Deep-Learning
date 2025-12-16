@@ -1,7 +1,4 @@
-"""
-Plant Village Disease Classification - Main Application
-Entry point that combines the Model and UI classes.
-"""
+"""Plant Disease Classifier - Main Application"""
 
 import streamlit as st
 from model import PlantDiseaseClassifier
@@ -9,19 +6,14 @@ from ui import PlantDiseaseUI
 
 
 # Constants - File paths
-MODEL_PATH = "efficientnetb3-Plant Village Disease-98.55.h5"
+MODEL_PATH = "densenet121-Plant Village Disease-98.55.h5"
 CLASS_DICT_PATH = "Plant Village Disease-class_dict.csv"
 VERSION_FILE = "version.txt"
 
 
 @st.cache_resource
 def get_classifier() -> PlantDiseaseClassifier:
-    """
-    Load and cache the classifier model.
-    
-    Returns:
-        Initialized PlantDiseaseClassifier instance
-    """
+    """Load and cache the classifier model."""
     classifier = PlantDiseaseClassifier(MODEL_PATH, CLASS_DICT_PATH)
     if not classifier.load():
         raise RuntimeError("Failed to load classifier model")
@@ -29,7 +21,7 @@ def get_classifier() -> PlantDiseaseClassifier:
 
 
 def load_version_info() -> str:
-    """Load version information from version.txt."""
+    """Load version info from version.txt file."""
     try:
         with open(VERSION_FILE, "r") as f:
             return f.read()
@@ -38,7 +30,7 @@ def load_version_info() -> str:
 
 
 def main():
-    """Main application entry point."""
+    """Main app entry point."""
     
     # Initialize UI
     ui = PlantDiseaseUI()

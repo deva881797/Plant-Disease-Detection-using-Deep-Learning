@@ -1,6 +1,6 @@
 # 🌿 Plant Village Disease Classifier
 
-A deep learning web application for identifying plant diseases from leaf images using EfficientNetB3 architecture.
+A deep learning web application for identifying plant diseases from leaf images using DenseNet121 architecture.
 
 ![Model Accuracy](https://img.shields.io/badge/Accuracy-98.55%25-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.7-blue)
@@ -9,7 +9,7 @@ A deep learning web application for identifying plant diseases from leaf images 
 
 ## 📋 Overview
 
-This application uses a trained EfficientNetB3 model to classify 38 different plant conditions (healthy and diseased) across 14 plant species from the Plant Village dataset.
+This application uses a trained DenseNet121 model to classify 38 different plant conditions (healthy and diseased) across 14 plant species from the Plant Village dataset.
 
 ### Supported Plants
 - 🍎 Apple | 🫐 Blueberry | 🍒 Cherry | 🌽 Corn
@@ -24,7 +24,7 @@ The model was trained under the following specific conditions:
 ### Model Architecture
 
 ```
-EfficientNetB3 (ImageNet pretrained, include_top=False, pooling='max')
+DenseNet121 (ImageNet pretrained, include_top=False, pooling='max')
 └── BatchNormalization (axis=-1, momentum=0.99, epsilon=0.001)
     └── Dense(256, activation='relu')
         ├── L2 kernel regularization: 0.016
@@ -115,7 +115,7 @@ Plant Village/
 ├── .dockerignore                       # Docker ignore rules
 ├── .streamlit/
 │   └── config.toml                     # Streamlit configuration
-├── efficientnetb3-Plant Village Disease-98.55.h5  # Trained model
+├── densenet121-Plant Village Disease-98.55.h5  # Trained model
 ├── Plant Village Disease-class_dict.csv          # Class labels
 ├── version.txt                         # Training environment versions
 └── README.md                           # This file
@@ -138,7 +138,7 @@ Plant Village/
 
 ## 📊 Model Performance
 
-- **Architecture:** EfficientNetB3
+- **Architecture:** DenseNet121
 - **Accuracy:** 98.55%
 - **Input Size:** 224 × 224 pixels
 - **Number of Classes:** 38
@@ -176,5 +176,5 @@ This project is for educational purposes.
 ## 🙏 Acknowledgments
 
 - Plant Village Dataset
-- EfficientNet Architecture
+- DenseNet Architecture
 - Streamlit Framework

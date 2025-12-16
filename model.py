@@ -1,7 +1,4 @@
-"""
-Plant Disease Classification Model - Inference Module
-Handles model loading, image preprocessing, and predictions.
-"""
+"""Plant Disease Model - Handles model loading and predictions"""
 
 import numpy as np
 import pandas as pd
@@ -13,15 +10,11 @@ from typing import Tuple, List, Dict, Optional
 
 class PlantDiseaseClassifier:
     """
-    A class to handle plant disease classification using EfficientNetB3.
+    Plant disease classifier using DenseNet121.
     
-    Training Conditions:
-        - Architecture: EfficientNetB3 (ImageNet pretrained)
-        - Custom layers: BatchNorm -> Dense(256) -> Dropout(0.45) -> Dense(38)
-        - Optimizer: Adamax (lr=0.001)
-        - Loss: Categorical Crossentropy
-        - Preprocessing: Identity function (no normalization, 0-255 range)
-        - Data Augmentation: Horizontal flip (training only)
+    Architecture: DenseNet121 (ImageNet pretrained)
+    Custom layers: BatchNorm -> Dense(256) -> Dropout(0.45) -> Dense(38)
+    Optimizer: Adamax (lr=0.001)
     """
     
     # Class constants matching training configuration
@@ -30,13 +23,7 @@ class PlantDiseaseClassifier:
     COLOR_MODE = 'RGB'
     
     def __init__(self, model_path: str, class_dict_path: str):
-        """
-        Initialize the classifier with model and class dictionary.
-        
-        Args:
-            model_path: Path to the trained .h5 model file
-            class_dict_path: Path to the class dictionary CSV file
-        """
+        """Initialize classifier with model and class dictionary paths."""
         self.model_path = model_path
         self.class_dict_path = class_dict_path
         self.model: Optional[keras.Model] = None
@@ -44,12 +31,7 @@ class PlantDiseaseClassifier:
         self.class_names: Dict[int, str] = {}
         
     def load(self) -> bool:
-        """
-        Load the model and class dictionary.
-        
-        Returns:
-            True if loading successful, False otherwise
-        """
+        """Load the model and class dictionary."""
         try:
             self.model = keras.models.load_model(self.model_path)
             self.class_df = pd.read_csv(self.class_dict_path)
@@ -64,19 +46,7 @@ class PlantDiseaseClassifier:
             return False
     
     def preprocess_image(self, image: Image.Image) -> np.ndarray:
-        """
-        Preprocess image for model prediction.
-        
-        During training, the preprocessing_function was an identity function (scalar)
-        that returned the image as-is without normalization. The ImageDataGenerator
-        kept images in 0-255 range, so we must NOT divide by 255 here.
-        
-        Args:
-            image: PIL Image to preprocess
-            
-        Returns:
-            Preprocessed numpy array ready for prediction
-        """
+        """Preprocess image for model prediction."""
         # Convert to RGB if necessary
         if image.mode != self.COLOR_MODE:
             image = image.convert(self.COLOR_MODE)
@@ -94,15 +64,7 @@ class PlantDiseaseClassifier:
         return img_array
     
     def predict(self, image: Image.Image) -> np.ndarray:
-        """
-        Get prediction probabilities for an image.
-        
-        Args:
-            image: PIL Image to classify
-            
-        Returns:
-            Array of prediction probabilities for each class
-        """
+        """Get prediction probabilities for an image."""
         if self.model is None:
             raise RuntimeError("Model not loaded. Call load() first.")
         
@@ -111,16 +73,7 @@ class PlantDiseaseClassifier:
         return predictions[0]
     
     def classify(self, image: Image.Image, top_k: int = 5) -> List[Dict]:
-        """
-        Classify an image and return top-k predictions.
-        
-        Args:
-            image: PIL Image to classify
-            top_k: Number of top predictions to return
-            
-        Returns:
-            List of dictionaries with class info and confidence
-        """
+        """Classify image and return top-k predictions."""
         predictions = self.predict(image)
         
         # Get top-k indices
@@ -146,15 +99,7 @@ class PlantDiseaseClassifier:
     
     @staticmethod
     def format_class_name(class_name: str) -> Tuple[str, str]:
-        """
-        Format class name for display.
-        
-        Args:
-            class_name: Raw class name from dataset
-            
-        Returns:
-            Tuple of (plant_name, condition)
-        """
+        """Format class name for display."""
         parts = class_name.split('___')
         plant = parts[0].replace('_', ' ')
         condition = parts[1].replace('_', ' ') if len(parts) > 1 else 'Unknown'
@@ -162,15 +107,7 @@ class PlantDiseaseClassifier:
     
     @staticmethod
     def is_healthy(class_name: str) -> bool:
-        """
-        Determine if the class represents a healthy plant.
-        
-        Args:
-            class_name: Class name to check
-            
-        Returns:
-            True if plant is healthy, False otherwise
-        """
+        """Check if plant is healthy."""
         return 'healthy' in class_name.lower()
     
     def get_num_classes(self) -> int:
@@ -182,14 +119,9 @@ class PlantDiseaseClassifier:
         return list(self.class_names.values())
     
     def get_training_info(self) -> Dict:
-        """
-        Get information about the model's training configuration.
-        
-        Returns:
-            Dictionary with training details
-        """
+        """Get model training configuration info."""
         return {
-            'architecture': 'EfficientNetB3',
+            'architecture': 'DenseNet121',
             'pretrained_weights': 'ImageNet',
             'input_size': f'{self.IMAGE_SIZE[0]} × {self.IMAGE_SIZE[1]} × {self.CHANNELS}',
             'color_mode': self.COLOR_MODE,

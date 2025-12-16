@@ -16,7 +16,7 @@ services:
       - ./ui.py:/app/ui.py:ro
       - ./.streamlit:/app/.streamlit:ro
       # Mount model and class dict (read-only)
-      - "./efficientnetb3-Plant Village Disease-98.55.h5:/app/efficientnetb3-Plant Village Disease-98.55.h5:ro"
+      - "./densenet121-Plant Village Disease-98.55.h5:/app/densenet121-Plant Village Disease-98.55.h5:ro"
       - "./Plant Village Disease-class_dict.csv:/app/Plant Village Disease-class_dict.csv:ro"
       - ./version.txt:/app/version.txt:ro
     environment:

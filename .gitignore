@@ -1,8 +1,4 @@
-# Model file (too large for GitHub - add manually)
-densenet121-Plant Village Disease-98.55.h5
-efficientnetb3-Plant Village Disease-*.h5
-
-# Training notebook (large file - add separately if needed)
+# Training notebook (large file - optional)
 Train and Validate.ipynb
 
 # Python

@@ -7,6 +7,13 @@ A high-performance deep learning web application for identifying plant diseases 
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.13.0-orange)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Latest-red)
 ![Model Format](https://img.shields.io/badge/Model-TFLite-yellow)
+![Live Demo](https://img.shields.io/badge/Live-Demo-success)
+
+## 🚀 Live Demo
+
+**Try it now:** [https://plant-disease-detection-using-deep-c44z.onrender.com/](https://plant-disease-detection-using-deep-c44z.onrender.com/)
+
+> Deployed on Render with TensorFlow Lite optimization for fast inference on limited resources.
 
 ## 📋 Overview
 

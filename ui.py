@@ -673,22 +673,37 @@ class PlantDiseaseUI:
 
             
             /* Expander Styling */
-            .streamlit-expanderHeader {
+            div[data-testid="stExpander"] > details > summary {
                 background: rgba(255, 255, 255, 0.05) !important;
                 border-radius: 12px;
                 border: 1px solid rgba(255, 255, 255, 0.1);
+                color: white !important;
             }
-            
-            /* Fix hover state to maintain consistent background */
-            .streamlit-expanderHeader:hover {
+
+            div[data-testid="stExpander"] > details > summary:hover {
                 background: rgba(255, 255, 255, 0.05) !important;
-                border-color: rgba(16, 185, 129, 0.3);
+                color: white !important;
             }
-            
-            .streamlit-expanderContent {
-                background: rgba(255, 255, 255, 0.03);
+
+            div[data-testid="stExpander"] > details > summary:focus,
+            div[data-testid="stExpander"] > details > summary:active {
+                background: rgba(255, 255, 255, 0.05) !important;
+                color: white !important;
+            }
+
+            div[data-testid="stExpander"] > details > div {
+                background: rgba(255, 255, 255, 0.03) !important;
                 border-radius: 0 0 12px 12px;
             }
+
+            div[data-testid="stExpander"] > details > summary {
+                transition: transform 0.08s ease, background 0.2s ease;
+            }
+
+            div[data-testid="stExpander"] > details > summary:active {
+                transform: scale(0.97);
+            }
+
             
             /* Text Colors */
             .stMarkdown p, .stMarkdown li, .stMarkdown span, .stText,
@@ -697,6 +712,59 @@ class PlantDiseaseUI:
             }
             
             strong, b { color: #10b981 !important; }
+            
+            /* Table Styling - Premium Design */
+            .stMarkdown table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin: 1rem 0;
+                background: rgba(255, 255, 255, 0.03);
+                border-radius: 12px;
+                overflow: hidden;
+                backdrop-filter: blur(10px);
+            }
+            
+            .stMarkdown table thead tr {
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.15));
+            }
+            
+            .stMarkdown table th {
+                color: #10b981 !important;
+                font-weight: 600;
+                padding: 1rem;
+                text-align: left;
+                border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .stMarkdown table td {
+                color: rgba(255, 255, 255, 0.9) !important;
+                padding: 0.875rem 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                font-size: 0.95rem;
+            }
+            
+            .stMarkdown table tbody tr {
+                transition: all 0.3s ease;
+            }
+            
+            .stMarkdown table tbody tr:hover {
+                background: rgba(16, 185, 129, 0.08);
+                transform: translateX(2px);
+            }
+            
+            .stMarkdown table tbody tr:last-child td {
+                border-bottom: none;
+            }
+            
+            /* First column (Parameter names) - special styling */
+            .stMarkdown table td:first-child {
+                color: #10b981 !important;
+                font-weight: 500;
+            }
             
             /* Success/Warning/Error Messages */
             .stSuccess {

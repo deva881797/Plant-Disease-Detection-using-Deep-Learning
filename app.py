@@ -6,9 +6,8 @@ from ui import PlantDiseaseUI
 
 
 # Constants - File paths
-MODEL_PATH = "densenet121-Plant Village Disease-98.55.h5"
+MODEL_PATH = "prediction_model.tflite"
 CLASS_DICT_PATH = "Plant Village Disease-class_dict.csv"
-VERSION_FILE = "version.txt"
 
 
 @st.cache_resource
@@ -18,15 +17,6 @@ def get_classifier() -> PlantDiseaseClassifier:
     if not classifier.load():
         raise RuntimeError("Failed to load classifier model")
     return classifier
-
-
-def load_version_info() -> str:
-    """Load version info from version.txt file."""
-    try:
-        with open(VERSION_FILE, "r") as f:
-            return f.read()
-    except FileNotFoundError:
-        return ""
 
 
 def main():
@@ -44,10 +34,9 @@ def main():
     
     # Get training info and version
     training_info = classifier.get_training_info()
-    version_info = load_version_info()
     
     # Render sidebar
-    ui.render_sidebar(training_info, version_info)
+    ui.render_sidebar(training_info)
     
     # Render main header
     ui.render_header()

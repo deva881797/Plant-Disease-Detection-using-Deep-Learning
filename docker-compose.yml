@@ -15,8 +15,8 @@ services:
       - ./model.py:/app/model.py:ro
       - ./ui.py:/app/ui.py:ro
       - ./.streamlit:/app/.streamlit:ro
-      # Mount model and class dict (read-only)
-      - "./densenet121-Plant Village Disease-98.55.h5:/app/densenet121-Plant Village Disease-98.55.h5:ro"
+      # Mount TFLite model and class dict (read-only)
+      - "./prediction_model.tflite:/app/prediction_model.tflite:ro"
       - "./Plant Village Disease-class_dict.csv:/app/Plant Village Disease-class_dict.csv:ro"
     environment:
       - STREAMLIT_SERVER_PORT=8501

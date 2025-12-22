@@ -33,3 +33,12 @@ wheels/
 # OS
 .DS_Store
 Thumbs.db
+
+# Test files
+test_*.py
+
+# Old model files (keep only TFLite)
+*.h5
+
+# Gemini artifacts
+.gemini/

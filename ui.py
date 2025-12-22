@@ -832,7 +832,7 @@ class PlantDiseaseUI:
         </div>
         """, unsafe_allow_html=True)
     
-    def render_sidebar(self, training_info: Dict, version_info: Optional[str] = None):
+    def render_sidebar(self, training_info: Dict):
         """
         Render the sidebar with app info and training details.
         
@@ -896,10 +896,6 @@ class PlantDiseaseUI:
                 - Preprocessing: Identity (no scaling)
                 """)
             
-            # Version Information
-            if version_info:
-                st.markdown("### 📦 Version Information")
-                st.code(version_info, language="text")
             
             st.markdown("---")
             

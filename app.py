@@ -1,4 +1,4 @@
-"""Plant Disease Classifier using CNN - Main Application"""
+"""Plant Disease Classification using CNN - Main Application"""
 
 import logging
 import sys
@@ -10,8 +10,8 @@ from ui import PlantDiseaseUI
 # Configure logging - logs go to server, not exposed to users
 logging.basicConfig(
     level=logging.ERROR,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    stream=sys.stderr
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    stream=sys.stderr,
 )
 
 # Constants - File paths
@@ -39,7 +39,9 @@ def main():
             classifier = get_classifier()
         except RuntimeError as e:
             logging.error(f"Model loading failed: {e}")
-            ui.render_error("⚠️ Service temporarily unavailable. Please try again later. (Error 503)")
+            ui.render_error(
+                "⚠️ Service temporarily unavailable. Please try again later. (Error 503)"
+            )
             st.stop()
 
         # Get training info and version
@@ -85,7 +87,9 @@ def main():
     except Exception as e:
         # Catch-all for any unhandled exceptions
         logging.error(f"Unhandled application error: {e}")
-        st.error("⚠️ An unexpected error occurred. Our team has been notified. Please try again later. (Error 500)")
+        st.error(
+            "⚠️ An unexpected error occurred. Our team has been notified. Please try again later. (Error 500)"
+        )
 
 
 if __name__ == "__main__":

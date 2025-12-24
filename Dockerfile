@@ -28,12 +28,15 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application files
 COPY . .
 
-# Expose Streamlit port
-EXPOSE 8501
+# Make start script executable
+RUN chmod +x start.sh
+
+# Expose both Streamlit and API ports
+EXPOSE 8501 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
-# Run Streamlit app
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]
+# Run both Streamlit and FastAPI
+CMD ["./start.sh"]

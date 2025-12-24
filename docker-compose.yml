@@ -9,11 +9,14 @@ services:
     container_name: plant-village-dev
     ports:
       - "8501:8501"
+      - "8000:8000"
     volumes:
       # Mount source code for live reload during development
       - ./app.py:/app/app.py:ro
       - ./model.py:/app/model.py:ro
       - ./ui.py:/app/ui.py:ro
+      - ./api.py:/app/api.py:ro
+      - ./start.sh:/app/start.sh:ro
       - ./.streamlit:/app/.streamlit:ro
       # Mount TFLite model and class dict (read-only)
       - "./prediction_model.tflite:/app/prediction_model.tflite:ro"

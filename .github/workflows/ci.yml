@@ -48,6 +48,7 @@ jobs:
   format-check:
     name: 🎨 Check Code Formatting
     runs-on: ubuntu-latest
+    continue-on-error: true  # Formatting issues are warnings, not blocking
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

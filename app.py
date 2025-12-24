@@ -1,9 +1,18 @@
 """Plant Disease Classifier using CNN - Main Application"""
 
+import logging
+import sys
 import streamlit as st
 
 from model import PlantDiseaseClassifier
 from ui import PlantDiseaseUI
+
+# Configure logging - logs go to server, not exposed to users
+logging.basicConfig(
+    level=logging.ERROR,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    stream=sys.stderr
+)
 
 # Constants - File paths
 MODEL_PATH = "prediction_model.tflite"
@@ -21,52 +30,62 @@ def get_classifier() -> PlantDiseaseClassifier:
 
 def main():
     """Main app entry point."""
-
-    # Initialize UI
-    ui = PlantDiseaseUI()
-
-    # Load classifier
     try:
-        classifier = get_classifier()
-    except RuntimeError as e:
-        ui.render_error(f"Failed to load model: {e}")
-        st.stop()
+        # Initialize UI
+        ui = PlantDiseaseUI()
 
-    # Get training info and version
-    training_info = classifier.get_training_info()
+        # Load classifier
+        try:
+            classifier = get_classifier()
+        except RuntimeError as e:
+            logging.error(f"Model loading failed: {e}")
+            ui.render_error("⚠️ Service temporarily unavailable. Please try again later. (Error 503)")
+            st.stop()
 
-    # Render sidebar
-    ui.render_sidebar(training_info)
+        # Get training info and version
+        training_info = classifier.get_training_info()
 
-    # Render main header
-    ui.render_header()
+        # Render sidebar
+        ui.render_sidebar(training_info)
 
-    # Create two columns for layout
-    col1, col2 = st.columns([1, 1], gap="large")
+        # Render main header
+        ui.render_header()
 
-    # Store predictions for use outside columns
-    predictions = None
+        # Create two columns for layout
+        col1, col2 = st.columns([1, 1], gap="large")
 
-    with col1:
-        # Image upload section
-        image = ui.render_upload_section()
+        # Store predictions for use outside columns
+        predictions = None
 
-    with col2:
-        if image is not None:
-            # Classify and show results
-            with st.spinner("🔄 Analyzing image..."):
-                predictions = classifier.classify(image, top_k=5)
-                ui.render_results(predictions)
-        else:
-            # Show placeholder
-            ui.render_placeholder()
+        with col1:
+            # Image upload section
+            image = ui.render_upload_section()
 
-    # Prevention and medication section - show only for the detected disease
-    if predictions:
-        ui.render_prevention_and_medication(predictions[0])
+        with col2:
+            if image is not None:
+                # Classify and show results
+                try:
+                    with st.spinner("🔄 Analyzing image..."):
+                        predictions = classifier.classify(image, top_k=5)
+                        ui.render_results(predictions)
+                except Exception as e:
+                    logging.error(f"Classification failed: {e}")
+                    st.error("⚠️ Unable to process image. Please try again. (Error 500)")
+            else:
+                # Show placeholder
+                ui.render_placeholder()
 
-    # Footer
-    ui.render_footer()
+        # Prevention and medication section - show only for the detected disease
+        if predictions:
+            ui.render_prevention_and_medication(predictions[0])
+
+        # Footer
+        ui.render_footer()
+
+    except Exception as e:
+        # Catch-all for any unhandled exceptions
+        logging.error(f"Unhandled application error: {e}")
+        st.error("⚠️ An unexpected error occurred. Our team has been notified. Please try again later. (Error 500)")
 
 
 if __name__ == "__main__":

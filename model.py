@@ -76,48 +76,56 @@ class PlantDiseaseClassifier:
     def predict(self, image: Image.Image) -> np.ndarray:
         """Get prediction probabilities for an image using TFLite."""
         if self.interpreter is None:
-            raise RuntimeError("Model not loaded. Call load() first.")
+            raise RuntimeError("Model not loaded")
 
-        # Preprocess image
-        processed_image = self.preprocess_image(image)
+        try:
+            # Preprocess image
+            processed_image = self.preprocess_image(image)
 
-        # Set input tensor
-        self.interpreter.set_tensor(self.input_details[0]["index"], processed_image)
+            # Set input tensor
+            self.interpreter.set_tensor(self.input_details[0]["index"], processed_image)
 
-        # Run inference
-        self.interpreter.invoke()
+            # Run inference
+            self.interpreter.invoke()
 
-        # Get output tensor
-        predictions = self.interpreter.get_tensor(self.output_details[0]["index"])
+            # Get output tensor
+            predictions = self.interpreter.get_tensor(self.output_details[0]["index"])
 
-        return predictions[0]
+            return predictions[0]
+        except Exception:
+            # Don't expose internal error details
+            raise RuntimeError("Prediction failed")
 
     def classify(self, image: Image.Image, top_k: int = 5) -> List[Dict]:
         """Classify image and return top-k predictions."""
-        predictions = self.predict(image)
+        try:
+            predictions = self.predict(image)
 
-        # Get top-k indices
-        top_indices = np.argsort(predictions)[-top_k:][::-1]
+            # Get top-k indices
+            top_indices = np.argsort(predictions)[-top_k:][::-1]
 
-        results = []
-        for idx in top_indices:
-            class_name = self.class_names.get(idx, "Unknown")
-            plant_name, condition = self.format_class_name(class_name)
-            is_healthy = self.is_healthy(class_name)
+            results = []
+            for idx in top_indices:
+                class_name = self.class_names.get(idx, "Unknown")
+                plant_name, condition = self.format_class_name(class_name)
+                is_healthy = self.is_healthy(class_name)
 
-            results.append(
-                {
-                    "class_index": int(idx),
-                    "class_name": class_name,
-                    "plant_name": plant_name,
-                    "condition": condition,
-                    "is_healthy": is_healthy,
-                    "confidence": float(predictions[idx]),
-                    "confidence_percent": float(predictions[idx] * 100),
-                }
-            )
+                results.append(
+                    {
+                        "class_index": int(idx),
+                        "class_name": class_name,
+                        "plant_name": plant_name,
+                        "condition": condition,
+                        "is_healthy": is_healthy,
+                        "confidence": float(predictions[idx]),
+                        "confidence_percent": float(predictions[idx] * 100),
+                    }
+                )
 
-        return results
+            return results
+        except Exception:
+            # Don't expose internal error details
+            raise RuntimeError("Classification failed")
 
     @staticmethod
     def format_class_name(class_name: str) -> Tuple[str, str]:

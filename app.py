@@ -2,6 +2,7 @@
 
 import logging
 import sys
+
 import streamlit as st
 
 from model import PlantDiseaseClassifier

@@ -1,4 +1,4 @@
-"""Plant Disease Classifier - Main Application"""
+"""Plant Disease Classifier using CNN - Main Application"""
 
 import streamlit as st
 

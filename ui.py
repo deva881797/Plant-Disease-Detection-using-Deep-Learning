@@ -3,27 +3,38 @@ Plant Disease Classification UI - Streamlit Interface Module
 Handles the user interface and user interactions.
 """
 
+from typing import Dict, List, Optional
+
 import streamlit as st
 from PIL import Image
-from typing import List, Dict, Optional
 
 
 class PlantDiseaseUI:
     """
     Streamlit UI class for the Plant Disease Classification application.
-    
+
     This class handles all UI rendering and user interactions,
     separate from the model inference logic.
     """
-    
+
     # Supported plants with emojis
     SUPPORTED_PLANTS = [
-        "🍎 Apple", "🫐 Blueberry", "🍒 Cherry", "🌽 Corn",
-        "🍇 Grape", "🍊 Orange", "🍑 Peach", "🫑 Pepper",
-        "🥔 Potato", "🫐 Raspberry", "🫘 Soybean", "🎃 Squash",
-        "🍓 Strawberry", "🍅 Tomato"
+        "🍎 Apple",
+        "🫐 Blueberry",
+        "🍒 Cherry",
+        "🌽 Corn",
+        "🍇 Grape",
+        "🍊 Orange",
+        "🍑 Peach",
+        "🫑 Pepper",
+        "🥔 Potato",
+        "🫐 Raspberry",
+        "🫘 Soybean",
+        "🎃 Squash",
+        "🍓 Strawberry",
+        "🍅 Tomato",
     ]
-    
+
     # Prevention and Medication information for ALL 38 disease classes
     PREVENTION_AND_MEDICATION = {
         "Apple": {
@@ -32,43 +43,43 @@ class PlantDiseaseUI:
                     "Remove and destroy fallen leaves in autumn",
                     "Prune trees to improve air circulation",
                     "Plant resistant apple varieties (Liberty, Freedom, Enterprise)",
-                    "Avoid overhead irrigation"
+                    "Avoid overhead irrigation",
                 ],
                 "medication": [
                     "Captan fungicide spray",
                     "Myclobutanil (Immunox)",
                     "Sulfur-based fungicides",
-                    "Apply fungicide at bud break, repeat every 7-10 days"
-                ]
+                    "Apply fungicide at bud break, repeat every 7-10 days",
+                ],
             },
             "Black rot": {
                 "prevention": [
                     "Remove mummified fruits and cankers",
                     "Prune dead or diseased branches",
                     "Maintain good tree hygiene",
-                    "Ensure proper spacing between trees"
+                    "Ensure proper spacing between trees",
                 ],
                 "medication": [
                     "Captan or Mancozeb fungicides",
                     "Thiophanate-methyl",
                     "Apply during bloom through summer",
-                    "Copper-based fungicides as preventive"
-                ]
+                    "Copper-based fungicides as preventive",
+                ],
             },
             "Cedar apple rust": {
                 "prevention": [
                     "Remove nearby juniper/cedar trees (alternate host)",
                     "Plant rust-resistant varieties (Redfree, Liberty)",
                     "Improve air circulation around trees",
-                    "Scout for galls on junipers in early spring"
+                    "Scout for galls on junipers in early spring",
                 ],
                 "medication": [
                     "Myclobutanil fungicide",
                     "Triadimefon (Bayleton)",
                     "Apply at pink bud stage",
-                    "Repeat every 7-10 days until petal fall"
-                ]
-            }
+                    "Repeat every 7-10 days until petal fall",
+                ],
+            },
         },
         "Cherry (including sour)": {
             "Powdery mildew": {
@@ -76,14 +87,14 @@ class PlantDiseaseUI:
                     "Ensure good air circulation",
                     "Avoid excessive nitrogen fertilization",
                     "Prune to open tree canopy",
-                    "Plant resistant varieties when available"
+                    "Plant resistant varieties when available",
                 ],
                 "medication": [
                     "Sulfur-based fungicides",
                     "Myclobutanil applications",
                     "Potassium bicarbonate sprays",
-                    "Apply at first sign of white powdery growth"
-                ]
+                    "Apply at first sign of white powdery growth",
+                ],
             }
         },
         "Corn (maize)": {
@@ -92,43 +103,43 @@ class PlantDiseaseUI:
                     "Plant resistant hybrids",
                     "Rotate crops with non-host plants",
                     "Manage crop residue through tillage",
-                    "Ensure adequate plant spacing"
+                    "Ensure adequate plant spacing",
                 ],
                 "medication": [
                     "Strobilurin fungicides (Quadris, Headline)",
                     "Triazole fungicides (Tilt, Propimax)",
                     "Apply at tasseling if threshold reached",
-                    "Scout fields regularly for early detection"
-                ]
+                    "Scout fields regularly for early detection",
+                ],
             },
             "Common rust": {
                 "prevention": [
                     "Plant resistant varieties",
                     "Early planting to avoid peak infection period",
                     "Monitor fields regularly",
-                    "Avoid late planting in endemic areas"
+                    "Avoid late planting in endemic areas",
                 ],
                 "medication": [
                     "Azoxystrobin fungicide",
                     "Propiconazole",
                     "Apply when pustules first appear on leaves",
-                    "Treatment usually not economical unless severe"
-                ]
+                    "Treatment usually not economical unless severe",
+                ],
             },
             "Northern Leaf Blight": {
                 "prevention": [
                     "Use resistant hybrids (Ht1, Ht2, Ht3 genes)",
                     "Rotate with non-host crops",
                     "Till crop residue to reduce inoculum",
-                    "Avoid continuous corn planting"
+                    "Avoid continuous corn planting",
                 ],
                 "medication": [
                     "Strobilurin fungicides",
                     "Triazole fungicides",
                     "Apply at VT-R1 growth stage",
-                    "Threshold: 50% of plants with lesions on third leaf"
-                ]
-            }
+                    "Threshold: 50% of plants with lesions on third leaf",
+                ],
+            },
         },
         "Grape": {
             "Black rot": {
@@ -136,43 +147,43 @@ class PlantDiseaseUI:
                     "Remove mummified berries and infected canes",
                     "Prune for good air circulation",
                     "Remove wild grapes nearby",
-                    "Keep vineyard floor clean"
+                    "Keep vineyard floor clean",
                 ],
                 "medication": [
                     "Myclobutanil fungicide",
                     "Mancozeb sprays",
                     "Captan applications",
-                    "Apply from bud break to veraison"
-                ]
+                    "Apply from bud break to veraison",
+                ],
             },
             "Esca (Black Measles)": {
                 "prevention": [
                     "Avoid large pruning wounds",
                     "Protect pruning cuts with wound sealant",
                     "Remove and destroy infected vines",
-                    "Practice balanced irrigation"
+                    "Practice balanced irrigation",
                 ],
                 "medication": [
                     "No effective chemical control available",
                     "Trunk surgery for mild cases",
                     "Sodium arsenite (where legally permitted)",
-                    "Focus on prevention and vine replacement"
-                ]
+                    "Focus on prevention and vine replacement",
+                ],
             },
             "Leaf blight (Isariopsis Leaf Spot)": {
                 "prevention": [
                     "Ensure good air circulation",
                     "Avoid overhead irrigation",
                     "Remove infected leaves promptly",
-                    "Maintain balanced nutrition"
+                    "Maintain balanced nutrition",
                 ],
                 "medication": [
                     "Mancozeb fungicide",
                     "Copper-based sprays",
                     "Captan applications",
-                    "Apply at first sign of infection"
-                ]
-            }
+                    "Apply at first sign of infection",
+                ],
+            },
         },
         "Orange": {
             "Haunglongbing (Citrus greening)": {
@@ -180,14 +191,14 @@ class PlantDiseaseUI:
                     "Control Asian citrus psyllid vectors",
                     "Use certified disease-free nursery stock",
                     "Remove infected trees promptly",
-                    "Regular scouting for psyllids"
+                    "Regular scouting for psyllids",
                 ],
                 "medication": [
                     "No cure available - prevention is key",
                     "Imidacloprid for psyllid control",
                     "Foliar nutrition to extend tree life",
-                    "Remove and destroy infected trees"
-                ]
+                    "Remove and destroy infected trees",
+                ],
             }
         },
         "Peach": {
@@ -196,14 +207,14 @@ class PlantDiseaseUI:
                     "Plant resistant varieties (Redhaven, Biscoe)",
                     "Avoid overhead irrigation",
                     "Maintain proper tree spacing",
-                    "Prune to improve air circulation"
+                    "Prune to improve air circulation",
                 ],
                 "medication": [
                     "Copper hydroxide sprays (dormant season)",
                     "Oxytetracycline (Mycoshield)",
                     "Apply copper at leaf fall and before bud break",
-                    "Avoid copper after petal fall (phytotoxicity)"
-                ]
+                    "Avoid copper after petal fall (phytotoxicity)",
+                ],
             }
         },
         "Pepper, bell": {
@@ -212,14 +223,14 @@ class PlantDiseaseUI:
                     "Use certified disease-free seeds",
                     "Hot water seed treatment (125°F for 30 min)",
                     "Rotate crops every 2-3 years",
-                    "Avoid overhead irrigation"
+                    "Avoid overhead irrigation",
                 ],
                 "medication": [
                     "Copper hydroxide sprays",
                     "Copper + Mancozeb combination",
                     "Acibenzolar-S-methyl (Actigard)",
-                    "Apply before symptoms appear"
-                ]
+                    "Apply before symptoms appear",
+                ],
             }
         },
         "Potato": {
@@ -228,29 +239,29 @@ class PlantDiseaseUI:
                     "Use certified disease-free seed potatoes",
                     "Rotate crops every 3-4 years",
                     "Avoid overhead irrigation",
-                    "Hill soil around plants"
+                    "Hill soil around plants",
                 ],
                 "medication": [
                     "Chlorothalonil sprays",
                     "Mancozeb fungicide",
                     "Azoxystrobin (Quadris)",
-                    "Begin at first sign of disease"
-                ]
+                    "Begin at first sign of disease",
+                ],
             },
             "Late blight": {
                 "prevention": [
                     "Plant resistant varieties",
                     "Destroy volunteer potatoes",
                     "Ensure good drainage",
-                    "Monitor weather conditions (cool, wet)"
+                    "Monitor weather conditions (cool, wet)",
                 ],
                 "medication": [
                     "Metalaxyl-M + Mancozeb (Ridomil Gold MZ)",
                     "Cymoxanil fungicides",
                     "Fluazinam (Omega)",
-                    "Apply preventively during wet weather"
-                ]
-            }
+                    "Apply preventively during wet weather",
+                ],
+            },
         },
         "Squash": {
             "Powdery mildew": {
@@ -258,14 +269,14 @@ class PlantDiseaseUI:
                     "Plant resistant varieties",
                     "Ensure good air circulation",
                     "Avoid overcrowding plants",
-                    "Water at base, not on leaves"
+                    "Water at base, not on leaves",
                 ],
                 "medication": [
                     "Sulfur-based fungicides",
                     "Potassium bicarbonate (Kaligreen)",
                     "Neem oil applications",
-                    "Myclobutanil (Immunox)"
-                ]
+                    "Myclobutanil (Immunox)",
+                ],
             }
         },
         "Strawberry": {
@@ -274,14 +285,14 @@ class PlantDiseaseUI:
                     "Plant certified disease-free stock",
                     "Ensure good air circulation",
                     "Avoid overhead irrigation",
-                    "Remove infected leaves promptly"
+                    "Remove infected leaves promptly",
                 ],
                 "medication": [
                     "Copper-based fungicides",
                     "Captan sprays",
                     "Apply at first sign of symptoms",
-                    "Renovate beds after harvest"
-                ]
+                    "Renovate beds after harvest",
+                ],
             }
         },
         "Tomato": {
@@ -290,147 +301,148 @@ class PlantDiseaseUI:
                     "Use certified disease-free seeds",
                     "Rotate crops every 2-3 years",
                     "Avoid overhead watering",
-                    "Remove infected plant debris"
+                    "Remove infected plant debris",
                 ],
                 "medication": [
                     "Copper hydroxide sprays",
                     "Streptomycin (for severe cases)",
                     "Acibenzolar-S-methyl (Actigard)",
-                    "Apply copper at first sign of disease"
-                ]
+                    "Apply copper at first sign of disease",
+                ],
             },
             "Early blight": {
                 "prevention": [
                     "Mulch around plants to prevent soil splash",
                     "Water at base of plants",
                     "Remove lower leaves touching soil",
-                    "Practice 3-year crop rotation"
+                    "Practice 3-year crop rotation",
                 ],
                 "medication": [
                     "Chlorothalonil (Daconil)",
                     "Mancozeb fungicide",
                     "Azoxystrobin (Quadris)",
-                    "Apply preventively every 7-14 days"
-                ]
+                    "Apply preventively every 7-14 days",
+                ],
             },
             "Late blight": {
                 "prevention": [
                     "Plant resistant varieties",
                     "Ensure good air circulation",
                     "Avoid wetting foliage",
-                    "Remove volunteer potato plants nearby"
+                    "Remove volunteer potato plants nearby",
                 ],
                 "medication": [
                     "Chlorothalonil preventive sprays",
                     "Mefenoxam + Mancozeb",
                     "Cymoxanil-based fungicides",
-                    "Apply every 5-7 days during wet weather"
-                ]
+                    "Apply every 5-7 days during wet weather",
+                ],
             },
             "Leaf Mold": {
                 "prevention": [
                     "Improve greenhouse ventilation",
                     "Reduce humidity below 85%",
                     "Space plants adequately",
-                    "Use resistant varieties (many available)"
+                    "Use resistant varieties (many available)",
                 ],
                 "medication": [
                     "Chlorothalonil sprays",
                     "Mancozeb applications",
                     "Improve air circulation first",
-                    "Remove severely infected leaves"
-                ]
+                    "Remove severely infected leaves",
+                ],
             },
             "Septoria leaf spot": {
                 "prevention": [
                     "Remove infected leaves promptly",
                     "Mulch to prevent soil splash",
                     "Avoid working with wet plants",
-                    "Rotate crops annually"
+                    "Rotate crops annually",
                 ],
                 "medication": [
                     "Chlorothalonil fungicide",
                     "Copper-based sprays",
                     "Mancozeb",
-                    "Begin treatment at first symptom"
-                ]
+                    "Begin treatment at first symptom",
+                ],
             },
             "Spider mites Two-spotted spider mite": {
                 "prevention": [
                     "Keep plants well-watered (mites prefer dry conditions)",
                     "Spray plants with water to dislodge mites",
                     "Introduce predatory mites (Phytoseiulus persimilis)",
-                    "Avoid excessive nitrogen fertilization"
+                    "Avoid excessive nitrogen fertilization",
                 ],
                 "medication": [
                     "Insecticidal soap spray",
                     "Neem oil applications",
                     "Abamectin miticide (Avid)",
-                    "Sulfur dusting (avoid in hot weather >90°F)"
-                ]
+                    "Sulfur dusting (avoid in hot weather >90°F)",
+                ],
             },
             "Target Spot": {
                 "prevention": [
                     "Ensure good air circulation",
                     "Avoid overhead irrigation",
                     "Remove lower leaves and suckers",
-                    "Practice crop rotation"
+                    "Practice crop rotation",
                 ],
                 "medication": [
                     "Chlorothalonil fungicide",
                     "Azoxystrobin (Quadris)",
                     "Mancozeb applications",
-                    "Apply at first sign of infection"
-                ]
+                    "Apply at first sign of infection",
+                ],
             },
             "Tomato Yellow Leaf Curl Virus": {
                 "prevention": [
                     "Control whitefly vectors aggressively",
                     "Use reflective mulches",
                     "Plant resistant varieties (Ty genes)",
-                    "Remove infected plants immediately"
+                    "Remove infected plants immediately",
                 ],
                 "medication": [
                     "No direct cure - vector management only",
                     "Imidacloprid for whitefly control",
                     "Yellow sticky traps for monitoring",
-                    "Remove and destroy infected plants"
-                ]
+                    "Remove and destroy infected plants",
+                ],
             },
             "Tomato mosaic virus": {
                 "prevention": [
                     "Use virus-free seeds and transplants",
                     "Disinfect tools with 10% bleach solution",
                     "Wash hands before handling plants",
-                    "Control aphid vectors"
+                    "Control aphid vectors",
                 ],
                 "medication": [
                     "No chemical cure available",
                     "Remove and destroy infected plants",
                     "Plant resistant varieties (Tm-2 gene)",
-                    "Do not smoke near tomato plants"
-                ]
-            }
-        }
+                    "Do not smoke near tomato plants",
+                ],
+            },
+        },
     }
-    
+
     def __init__(self):
         """Initialize the UI with page configuration."""
         self._configure_page()
         self._inject_custom_css()
-    
+
     def _configure_page(self):
         """Configure Streamlit page settings."""
         st.set_page_config(
             page_title="🌿 Plant Disease Classifier",
             page_icon="🌿",
             layout="wide",
-            initial_sidebar_state="expanded"
+            initial_sidebar_state="expanded",
         )
-    
+
     def _inject_custom_css(self):
         """Inject custom CSS for premium, modern styling with glassmorphism and animations."""
-        st.markdown("""
+        st.markdown(
+            """
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
             
@@ -893,41 +905,48 @@ class PlantDiseaseUI:
                 background-size: 50px 50px;
             }
         </style>
-        """, unsafe_allow_html=True)
-    
-    
+        """,
+            unsafe_allow_html=True,
+        )
+
     def render_header(self):
         """Render the main header section with animated elements."""
-        st.markdown("""
+        st.markdown(
+            """
         <div class="main-header">
             <div class="leaf-icon">🌿</div>
             <h1>Plant Disease Classifier</h1>
             <p>🔬 AI-Powered Plant Health Analysis • 98.55% Accuracy • 38 Disease Classes</p>
         </div>
-        """, unsafe_allow_html=True)
-    
+        """,
+            unsafe_allow_html=True,
+        )
+
     def render_sidebar(self, training_info: Dict):
         """
         Render the sidebar with app info and training details.
-        
+
         Args:
             training_info: Dictionary with training configuration
             version_info: Optional version string from version.txt
         """
         with st.sidebar:
             st.markdown("### 🌿 About This App")
-            st.markdown("""
+            st.markdown(
+                """
             This application uses a **deep learning model** trained on the 
             **Plant Village dataset** to identify plant diseases from leaf images.
-            """)
-            
+            """
+            )
+
             st.markdown("---")
-            
+
             # Training Conditions Section
             st.markdown("### ⚙️ Training Conditions")
-            
+
             with st.expander("📊 Model Architecture", expanded=True):
-                st.markdown(f"""
+                st.markdown(
+                    f"""
                 **Base Model:** {training_info.get('architecture', 'DenseNet121')} ({training_info.get('pretrained_weights', 'ImageNet')} pretrained)
                 
                 **Custom Layers:**
@@ -941,10 +960,12 @@ class PlantDiseaseUI:
                     └── Dropout(rate=0.45, seed=123)
                         └── Dense(38, activation='softmax')
                 ```
-                """)
-            
+                """
+                )
+
             with st.expander("🎯 Training Parameters"):
-                st.markdown(f"""
+                st.markdown(
+                    f"""
                 | Parameter | Value |
                 |-----------|-------|
                 | **Optimizer** | {training_info.get('optimizer', 'Adamax')} |
@@ -952,10 +973,12 @@ class PlantDiseaseUI:
                 | **Loss Function** | {training_info.get('loss_function', 'Categorical Crossentropy')} |
                 | **Input Size** | {training_info.get('input_size', '224 × 224 × 3')} |
                 | **Classes** | {training_info.get('num_classes', 38)} |
-                """)
-            
+                """
+                )
+
             with st.expander("🔄 Data Augmentation"):
-                st.markdown("""
+                st.markdown(
+                    """
                 **Training:**
                 - Horizontal Flip: ✅ Enabled
                 - Shuffle: ✅ Enabled
@@ -968,98 +991,104 @@ class PlantDiseaseUI:
                 - Color Mode: RGB
                 - Target Size: 224 × 224
                 - Preprocessing: Identity (no scaling)
-                """)
-            
-            
+                """
+                )
+
             st.markdown("---")
-            
+
             st.markdown("### 🌱 Supported Plants")
             for plant in self.SUPPORTED_PLANTS:
                 st.markdown(f"- {plant}")
-    
+
     def render_upload_section(self) -> Optional[Image.Image]:
         """
         Render the image upload section.
-        
+
         Returns:
             PIL Image if uploaded, None otherwise
         """
         st.markdown("### 📤 Upload Image")
-        
+
         uploaded_file = st.file_uploader(
             "Choose a leaf image...",
             type=["jpg", "jpeg", "png"],
-            help="Upload a clear image of a plant leaf for disease detection"
+            help="Upload a clear image of a plant leaf for disease detection",
         )
-        
+
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
             st.image(image, caption="Uploaded Image", use_container_width=True)
             return image
-        
+
         return None
-    
+
     def render_results(self, predictions: List[Dict]):
         """
         Render classification results.
-        
+
         Args:
             predictions: List of prediction dictionaries from classifier
         """
         st.markdown("### 🔬 Analysis Results")
-        
+
         if not predictions:
             st.warning("No predictions available")
             return
-        
+
         # Top prediction
         top = predictions[0]
-        
+
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
-        
+
         # Plant name
         st.markdown(f"**Plant:** {top['plant_name']}")
-        
+
         # Health status badge
-        if top['is_healthy']:
-            st.markdown('<span class="healthy-badge">✅ Healthy</span>', unsafe_allow_html=True)
+        if top["is_healthy"]:
+            st.markdown(
+                '<span class="healthy-badge">✅ Healthy</span>', unsafe_allow_html=True
+            )
         else:
-            st.markdown(f'<span class="disease-badge">⚠️ {top["condition"]}</span>', unsafe_allow_html=True)
-        
+            st.markdown(
+                f'<span class="disease-badge">⚠️ {top["condition"]}</span>',
+                unsafe_allow_html=True,
+            )
+
         st.markdown("---")
-        
+
         # Confidence
         st.markdown("**Confidence Level:**")
-        confidence = top['confidence_percent']
-        
+        confidence = top["confidence_percent"]
+
         if confidence >= 80:
             st.success(f"🎯 {confidence:.1f}% confident")
         elif confidence >= 50:
             st.warning(f"🎯 {confidence:.1f}% confident")
         else:
             st.error(f"🎯 {confidence:.1f}% confident")
-        
+
         st.progress(confidence / 100)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-        
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
         # Top 5 predictions
         st.markdown("### 📊 Top 5 Predictions")
-        
+
         for pred in predictions:
             col_a, col_b = st.columns([3, 1])
             with col_a:
                 st.markdown(f"**{pred['plant_name']}** - {pred['condition']}")
             with col_b:
                 st.markdown(f"`{pred['confidence_percent']:.1f}%`")
-            
-            st.progress(pred['confidence_percent'] / 100)
-    
+
+            st.progress(pred["confidence_percent"] / 100)
+
     def render_placeholder(self):
         """Render placeholder when no image is uploaded."""
         st.info("👆 Upload an image to see the analysis results")
-        
-        st.markdown("""
+
+        st.markdown(
+            """
         <div class="info-card">
             <h4>📝 Tips for best results:</h4>
             <ul>
@@ -1069,30 +1098,34 @@ class PlantDiseaseUI:
                 <li>Capture the affected area clearly</li>
             </ul>
         </div>
-        """, unsafe_allow_html=True)
-    
+        """,
+            unsafe_allow_html=True,
+        )
+
     def render_prevention_and_medication(self, prediction: Dict = None):
         """
         Render prevention and medication for the specific detected disease.
         If healthy, show creative care tips and fun facts.
-        
+
         Args:
             prediction: The top prediction dictionary from classifier
         """
         if prediction is None:
             return
-        
+
         st.markdown("---")
-        
-        if prediction['is_healthy']:
-            self._render_healthy_plant_info(prediction['plant_name'])
+
+        if prediction["is_healthy"]:
+            self._render_healthy_plant_info(prediction["plant_name"])
         else:
-            self._render_disease_treatment(prediction['plant_name'], prediction['condition'])
-    
+            self._render_disease_treatment(
+                prediction["plant_name"], prediction["condition"]
+            )
+
     def _render_healthy_plant_info(self, plant_name: str):
         """Render creative content for healthy plants."""
         st.markdown("### 🎉 Great News! Your Plant is Healthy!")
-        
+
         # Fun facts and care tips for healthy plants
         healthy_tips = {
             "Apple": {
@@ -1102,9 +1135,9 @@ class PlantDiseaseUI:
                     "Water deeply once a week during dry periods",
                     "Prune in late winter for better fruit production",
                     "Apply balanced fertilizer in early spring",
-                    "Mulch around the base to retain moisture"
+                    "Mulch around the base to retain moisture",
                 ],
-                "message": "Your apple tree is thriving! Keep up the great care."
+                "message": "Your apple tree is thriving! Keep up the great care.",
             },
             "Tomato": {
                 "emoji": "🍅",
@@ -1113,9 +1146,9 @@ class PlantDiseaseUI:
                     "Water consistently - tomatoes love 1-2 inches per week",
                     "Stake or cage plants for better air circulation",
                     "Remove suckers for larger fruits",
-                    "Add calcium to prevent blossom end rot"
+                    "Add calcium to prevent blossom end rot",
                 ],
-                "message": "Your tomato plant looks fantastic! Expect a bountiful harvest."
+                "message": "Your tomato plant looks fantastic! Expect a bountiful harvest.",
             },
             "Potato": {
                 "emoji": "🥔",
@@ -1124,9 +1157,9 @@ class PlantDiseaseUI:
                     "Hill soil around plants as they grow",
                     "Water evenly to prevent scab",
                     "Stop watering 2 weeks before harvest",
-                    "Store in cool, dark place after harvesting"
+                    "Store in cool, dark place after harvesting",
                 ],
-                "message": "Your potato plants are in excellent condition!"
+                "message": "Your potato plants are in excellent condition!",
             },
             "Grape": {
                 "emoji": "🍇",
@@ -1135,9 +1168,9 @@ class PlantDiseaseUI:
                     "Prune heavily in late winter",
                     "Train vines on trellises for best production",
                     "Thin grape clusters for larger berries",
-                    "Water deeply but infrequently"
+                    "Water deeply but infrequently",
                 ],
-                "message": "Your grapevine is healthy and ready to flourish!"
+                "message": "Your grapevine is healthy and ready to flourish!",
             },
             "Corn (maize)": {
                 "emoji": "🌽",
@@ -1146,9 +1179,9 @@ class PlantDiseaseUI:
                     "Plant in blocks for better pollination",
                     "Water 1-2 inches per week",
                     "Side-dress with nitrogen when knee-high",
-                    "Harvest when silks turn brown"
+                    "Harvest when silks turn brown",
                 ],
-                "message": "Your corn is growing strong and healthy!"
+                "message": "Your corn is growing strong and healthy!",
             },
             "Pepper, bell": {
                 "emoji": "🫑",
@@ -1157,9 +1190,9 @@ class PlantDiseaseUI:
                     "Provide consistent moisture",
                     "Use stakes to support heavy fruit load",
                     "Mulch to keep roots cool",
-                    "Harvest regularly to encourage more fruit"
+                    "Harvest regularly to encourage more fruit",
                 ],
-                "message": "Your pepper plants are in perfect health!"
+                "message": "Your pepper plants are in perfect health!",
             },
             "Cherry (including sour)": {
                 "emoji": "🍒",
@@ -1168,9 +1201,9 @@ class PlantDiseaseUI:
                     "Protect blossoms from late frost",
                     "Net trees to protect from birds",
                     "Prune after fruiting",
-                    "Water deeply during dry spells"
+                    "Water deeply during dry spells",
                 ],
-                "message": "Your cherry tree is healthy and beautiful!"
+                "message": "Your cherry tree is healthy and beautiful!",
             },
             "Strawberry": {
                 "emoji": "🍓",
@@ -1179,9 +1212,9 @@ class PlantDiseaseUI:
                     "Mulch with straw to prevent fruit rot",
                     "Remove runners for larger berries",
                     "Water in the morning to prevent disease",
-                    "Renovate beds after 3 years"
+                    "Renovate beds after 3 years",
                 ],
-                "message": "Your strawberry plants are thriving!"
+                "message": "Your strawberry plants are thriving!",
             },
             "Blueberry": {
                 "emoji": "🫐",
@@ -1190,9 +1223,9 @@ class PlantDiseaseUI:
                     "Maintain acidic soil pH (4.5-5.5)",
                     "Mulch with pine bark or sawdust",
                     "Water 1-2 inches per week",
-                    "Prune old canes annually"
+                    "Prune old canes annually",
                 ],
-                "message": "Your blueberry bush is thriving beautifully!"
+                "message": "Your blueberry bush is thriving beautifully!",
             },
             "Orange": {
                 "emoji": "🍊",
@@ -1201,9 +1234,9 @@ class PlantDiseaseUI:
                     "Water deeply but allow soil to dry between watering",
                     "Fertilize with citrus-specific fertilizer",
                     "Protect from frost in winter",
-                    "Prune to maintain shape and airflow"
+                    "Prune to maintain shape and airflow",
                 ],
-                "message": "Your citrus tree is in excellent health!"
+                "message": "Your citrus tree is in excellent health!",
             },
             "Peach": {
                 "emoji": "🍑",
@@ -1212,9 +1245,9 @@ class PlantDiseaseUI:
                     "Prune heavily in late winter",
                     "Thin fruits for larger peaches",
                     "Apply dormant spray in winter",
-                    "Water deeply during fruit development"
+                    "Water deeply during fruit development",
                 ],
-                "message": "Your peach tree looks wonderful!"
+                "message": "Your peach tree looks wonderful!",
             },
             "Raspberry": {
                 "emoji": "🫐",
@@ -1223,9 +1256,9 @@ class PlantDiseaseUI:
                     "Provide support with trellises",
                     "Prune old canes after fruiting",
                     "Mulch to keep roots cool",
-                    "Water consistently especially during fruiting"
+                    "Water consistently especially during fruiting",
                 ],
-                "message": "Your raspberry plants are flourishing!"
+                "message": "Your raspberry plants are flourishing!",
             },
             "Soybean": {
                 "emoji": "🫘",
@@ -1234,108 +1267,141 @@ class PlantDiseaseUI:
                     "Plant after soil warms to 60°F",
                     "Inoculate seeds for nitrogen fixation",
                     "Scout regularly for pests",
-                    "Harvest when leaves drop and pods rattle"
+                    "Harvest when leaves drop and pods rattle",
                 ],
-                "message": "Your soybean crop is growing strong!"
-            }
+                "message": "Your soybean crop is growing strong!",
+            },
         }
-        
+
         # Get tips for this plant or use default
         plant_key = plant_name.strip()
-        tips = healthy_tips.get(plant_key, {
-            "emoji": "🌿",
-            "fun_fact": "Healthy plants can live for decades with proper care!",
-            "care_tips": [
-                "Water appropriately for the species",
-                "Ensure proper sunlight exposure",
-                "Use quality soil with good drainage",
-                "Monitor regularly for early signs of stress"
-            ],
-            "message": "Your plant is in excellent health! Keep nurturing it."
-        })
-        
+        tips = healthy_tips.get(
+            plant_key,
+            {
+                "emoji": "🌿",
+                "fun_fact": "Healthy plants can live for decades with proper care!",
+                "care_tips": [
+                    "Water appropriately for the species",
+                    "Ensure proper sunlight exposure",
+                    "Use quality soil with good drainage",
+                    "Monitor regularly for early signs of stress",
+                ],
+                "message": "Your plant is in excellent health! Keep nurturing it.",
+            },
+        )
+
         col1, col2 = st.columns([1, 1])
-        
+
         with col1:
-            st.markdown(f"""
+            st.markdown(
+                f"""
             <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
                         padding: 2rem; border-radius: 20px; text-align: center; color: white;">
                 <h1 style="font-size: 4rem; margin: 0;">{tips['emoji']}</h1>
                 <h3 style="margin: 0.5rem 0;">Congratulations!</h3>
                 <p style="margin: 0; opacity: 0.9;">{tips['message']}</p>
             </div>
-            """, unsafe_allow_html=True)
-            
+            """,
+                unsafe_allow_html=True,
+            )
+
             st.markdown("---")
             st.markdown("**💡 Fun Fact:**")
-            st.info(tips['fun_fact'])
-        
+            st.info(tips["fun_fact"])
+
         with col2:
             st.markdown("**🌱 Care Tips to Maintain Health:**")
-            for tip in tips['care_tips']:
+            for tip in tips["care_tips"]:
                 st.markdown(f"✅ {tip}")
-            
+
             st.markdown("---")
             st.markdown("**🌟 Keep Your Plant Healthy:**")
-            st.markdown("""
+            st.markdown(
+                """
             - Continue regular monitoring
             - Maintain consistent watering schedule  
             - Watch for any changes in leaf color
             - Enjoy your thriving plant! 🎊
-            """)
-    
+            """
+            )
+
     def _render_disease_treatment(self, plant_name: str, condition: str):
         """Render prevention and medication for the specific detected disease."""
         st.markdown(f"### 💊 Treatment for {condition}")
         st.markdown(f"*Recommended prevention and treatment for your {plant_name}*")
-        
+
         # Clean condition name for matching
         condition_clean = condition.strip()
-        
+
         # Find matching disease info
         disease_info = None
         for plant_key, diseases in self.PREVENTION_AND_MEDICATION.items():
             # Check if plant name matches (remove emoji for comparison)
-            plant_clean = plant_key.replace("🍎", "").replace("🍅", "").replace("🥔", "").replace("🍇", "").replace("🌽", "").replace("🫑", "").strip()
-            if plant_clean.lower() in plant_name.lower() or plant_name.lower() in plant_clean.lower():
+            plant_clean = (
+                plant_key.replace("🍎", "")
+                .replace("🍅", "")
+                .replace("🥔", "")
+                .replace("🍇", "")
+                .replace("🌽", "")
+                .replace("🫑", "")
+                .strip()
+            )
+            if (
+                plant_clean.lower() in plant_name.lower()
+                or plant_name.lower() in plant_clean.lower()
+            ):
                 for disease_name, info in diseases.items():
-                    if disease_name.lower() in condition_clean.lower() or condition_clean.lower() in disease_name.lower():
+                    if (
+                        disease_name.lower() in condition_clean.lower()
+                        or condition_clean.lower() in disease_name.lower()
+                    ):
                         disease_info = info
                         break
             if disease_info:
                 break
-        
+
         if disease_info:
             col1, col2 = st.columns(2)
-            
+
             with col1:
-                st.markdown("""
+                st.markdown(
+                    """
                 <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); 
                             padding: 1rem; border-radius: 15px; color: white; margin-bottom: 1rem;">
                     <h4 style="margin: 0;">🛡️ Prevention</h4>
                 </div>
-                """, unsafe_allow_html=True)
+                """,
+                    unsafe_allow_html=True,
+                )
                 for tip in disease_info.get("prevention", []):
                     st.markdown(f"• {tip}")
-            
+
             with col2:
-                st.markdown("""
+                st.markdown(
+                    """
                 <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); 
                             padding: 1rem; border-radius: 15px; color: white; margin-bottom: 1rem;">
                     <h4 style="margin: 0;">💉 Treatment</h4>
                 </div>
-                """, unsafe_allow_html=True)
+                """,
+                    unsafe_allow_html=True,
+                )
                 for med in disease_info.get("medication", []):
                     st.markdown(f"• {med}")
-            
+
             st.markdown("---")
-            st.warning("⚠️ **Disclaimer:** Always follow product labels and local regulations when applying treatments. Consult an agricultural expert for severe cases.")
+            st.warning(
+                "⚠️ **Disclaimer:** Always follow product labels and local regulations when applying treatments. Consult an agricultural expert for severe cases."
+            )
         else:
-            st.info(f"Detailed treatment information for '{condition}' is being added. Please consult a local agricultural expert for specific recommendations.")
-    
+            st.info(
+                f"Detailed treatment information for '{condition}' is being added. Please consult a local agricultural expert for specific recommendations."
+            )
+
     def render_footer(self):
         """Render the footer section with modern styling."""
-        st.markdown("""
+        st.markdown(
+            """
         <div class="custom-footer">
             <p style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem;">
                 🌿 <span style="background: linear-gradient(135deg, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Plant Disease Classifier</span>
@@ -1347,8 +1413,10 @@ class PlantDiseaseUI:
                 🔬 TensorFlow • 🐍 Python • 🎨 Streamlit • 🐳 Docker
             </p>
         </div>
-        """, unsafe_allow_html=True)
-    
+        """,
+            unsafe_allow_html=True,
+        )
+
     def render_error(self, message: str):
         """Render an error message."""
         st.error(f"❌ {message}")

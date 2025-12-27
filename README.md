@@ -23,6 +23,7 @@ The solution is built using a **DenseNet121-based model optimized with TensorFlo
 
 **Try it now:** [plant-disease-detection-using-deep-c44z.onrender.com](https://plant-disease-detection-using-deep-c44z.onrender.com/)
 
+---
 
 ## ✨ Key Highlights
 

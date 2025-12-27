@@ -1,0 +1,17 @@
+# Render.com Blueprint - Infrastructure as Code
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: plant-disease-classifier
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: oregon  # Free tier region
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: API_SECRET_KEY
+        generateValue: true  # Render auto-generates a secure key
+      - key: PYTHONUNBUFFERED
+        value: "1"

@@ -11,11 +11,12 @@ ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
 # Set working directory
 WORKDIR /app
 
-# Install minimal system dependencies for OpenCV
+# Install minimal system dependencies for OpenCV and nginx
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
     curl \
+    nginx \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -28,11 +29,14 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application files
 COPY . .
 
-# Make start script executable
-RUN chmod +x start.sh
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose both Streamlit and API ports
-EXPOSE 8501 8000
+# Fix line endings (Windows to Unix) and make start script executable
+RUN sed -i 's/\r$//' start.sh && chmod +x start.sh
+
+# Expose only the nginx proxy port (8501)
+EXPOSE 8501
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \

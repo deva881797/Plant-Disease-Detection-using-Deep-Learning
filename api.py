@@ -1,11 +1,12 @@
 """Plant Disease Classification - REST API"""
 
 import logging
+import os
 import sys
 from io import BytesIO
 from typing import List
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from pydantic import BaseModel
@@ -38,6 +39,27 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# API Security - Read secret key from environment
+API_SECRET_KEY = os.environ.get("API_SECRET_KEY", "")
+
+
+async def verify_api_key(x_api_key: str = Header(None, alias="X-API-Key")):
+    """Validate API key for protected endpoints. Always required."""
+    if not API_SECRET_KEY:
+        # API key not configured - server misconfiguration
+        logging.error("API_SECRET_KEY environment variable not set")
+        raise HTTPException(
+            status_code=500,
+            detail="Server configuration error. Please contact support.",
+        )
+    if not x_api_key or x_api_key != API_SECRET_KEY:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or missing API key. Include 'X-API-Key' header.",
+        )
+    return True
+
 
 # Load classifier at startup
 classifier = None
@@ -101,8 +123,8 @@ async def health_check():
 
 
 @app.get("/api/classes", response_model=ClassesResponse)
-async def get_classes():
-    """Get all available disease classes."""
+async def get_classes(_: bool = Depends(verify_api_key)):
+    """Get all available disease classes. Requires API key."""
     if classifier is None:
         raise HTTPException(status_code=503, detail="Model not loaded")
 
@@ -111,7 +133,7 @@ async def get_classes():
 
 
 @app.post("/api/predict", response_model=PredictionResponse)
-async def predict(file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(...), _: bool = Depends(verify_api_key)):
     """
     Predict plant disease from an uploaded image.
 

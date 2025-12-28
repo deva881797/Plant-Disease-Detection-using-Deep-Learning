@@ -37,6 +37,7 @@ Thumbs.db
 # Test files
 test_*.py
 api_test_runner.py
+testimage.jpg
 
 # Old model files (keep only TFLite)
 *.h5

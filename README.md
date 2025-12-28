@@ -40,20 +40,21 @@ The solution is built using a **DenseNet121-based model optimized with TensorFlo
 The application follows a **"Single Model Owner"** design pattern. The heavy TFLite model is loaded only by the FastAPI service, while the Streamlit UI acts as a thin client. This prevents duplicate memory overhead and improves system resilience.
 
 ```
-graph LR
-    User["👤 User Browser"] --> Nginx
-
-    subgraph Docker["🐳 Docker Container (:8501)"]
-        Nginx["🌐 Nginx<br/>Reverse Proxy"]
-        Streamlit["🖥️ Streamlit UI<br/>(Lightweight Client)"]
-        FastAPI["⚙️ FastAPI Service<br/>(Model Owner)"]
-        Model["🧠 TFLite Model<br/>(42.3 MB)"]
-
-        Nginx --> Streamlit
-        Streamlit -- "Internal API Call" --> FastAPI
-        FastAPI --> Model
-        Nginx -. "/api/* (External)" .-> FastAPI
-    end
+👤 User Browser
+       |
+       v
+🌐 Nginx (Reverse Proxy)
+       |
+       |---- UI Requests ---->
+       |                      🖥️ Streamlit UI
+       |                           |
+       |                           v
+       |                     ⚙️ FastAPI Service
+       |                           |
+       |                           v
+       |                     🧠 TFLite Model
+       |
+       |---- /api/* Requests ------------------> ⚙️ FastAPI Service
 ```
 
 **Design Philosophy**: Keep the UI thin, the API stateless, and the model centralized for maximum efficiency and scalability.

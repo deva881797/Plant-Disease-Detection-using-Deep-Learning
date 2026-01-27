@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 0 * * 0'  # Weekly security scan on Sundays
+    - cron: '0 0 1 */6 *'  # Weekly security scan on Sundays
   workflow_dispatch:
 
 env:

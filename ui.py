@@ -932,12 +932,10 @@ class PlantDiseaseUI:
         """
         with st.sidebar:
             st.markdown("### 🌿 About This App")
-            st.markdown(
-                """
+            st.markdown("""
             This application uses a **deep learning model** trained on the 
             **Plant Village dataset** to identify plant diseases from leaf images.
-            """
-            )
+            """)
 
             st.markdown("---")
 
@@ -945,8 +943,7 @@ class PlantDiseaseUI:
             st.markdown("### ⚙️ Training Conditions")
 
             with st.expander("📊 Model Architecture", expanded=True):
-                st.markdown(
-                    f"""
+                st.markdown(f"""
                 **Base Model:** {training_info.get('architecture', 'DenseNet121')} ({training_info.get('pretrained_weights', 'ImageNet')} pretrained)
                 
                 **Custom Layers:**
@@ -960,12 +957,10 @@ class PlantDiseaseUI:
                     └── Dropout(rate=0.45, seed=123)
                         └── Dense(38, activation='softmax')
                 ```
-                """
-                )
+                """)
 
             with st.expander("🎯 Training Parameters"):
-                st.markdown(
-                    f"""
+                st.markdown(f"""
                 | Parameter | Value |
                 |-----------|-------|
                 | **Optimizer** | {training_info.get('optimizer', 'Adamax')} |
@@ -973,12 +968,10 @@ class PlantDiseaseUI:
                 | **Loss Function** | {training_info.get('loss_function', 'Categorical Crossentropy')} |
                 | **Input Size** | {training_info.get('input_size', '224 × 224 × 3')} |
                 | **Classes** | {training_info.get('num_classes', 38)} |
-                """
-                )
+                """)
 
             with st.expander("🔄 Data Augmentation"):
-                st.markdown(
-                    """
+                st.markdown("""
                 **Training:**
                 - Horizontal Flip: ✅ Enabled
                 - Shuffle: ✅ Enabled
@@ -991,8 +984,7 @@ class PlantDiseaseUI:
                 - Color Mode: RGB
                 - Target Size: 224 × 224
                 - Preprocessing: Identity (no scaling)
-                """
-                )
+                """)
 
             st.markdown("---")
 
@@ -1319,14 +1311,12 @@ class PlantDiseaseUI:
 
             st.markdown("---")
             st.markdown("**🌟 Keep Your Plant Healthy:**")
-            st.markdown(
-                """
+            st.markdown("""
             - Continue regular monitoring
             - Maintain consistent watering schedule  
             - Watch for any changes in leaf color
             - Enjoy your thriving plant! 🎊
-            """
-            )
+            """)
 
     def _render_disease_treatment(self, plant_name: str, condition: str):
         """Render prevention and medication for the specific detected disease."""
